@@ -214,6 +214,10 @@ as described under [Artwork](#artwork).
 
 ## Licence and trademarks
 
+The project's own source and documentation are [MIT](LICENSE), copyright
+RealRoyalCrown 2026. That grant does not cover names or artwork that belong
+to others.
+
 Personal project, not affiliated with or endorsed by Rockstar Games or
 Take-Two Interactive. *Grand Theft Auto* and the `VI` logo are their
 trademarks; the logo is included here for personal use only. Pricedown is
