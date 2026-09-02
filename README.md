@@ -23,8 +23,20 @@ npm run widget:build   # produce a signed-for-local-use .app and .dmg
 ```
 
 The finished app lands in `src-tauri/target/release/bundle/macos/`. Drag it to
-`/Applications` and, if you want it to come back after a reboot, add it under
-**System Settings → General → Login Items**.
+`/Applications`.
+
+To start it at login, either add it under **System Settings → General → Login
+Items**, or install the launch agent in `packaging/`, which does the same thing
+from the command line:
+
+```bash
+cp packaging/com.viktor.gta6countdown.plist ~/Library/LaunchAgents/
+launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.viktor.gta6countdown.plist
+```
+
+`KeepAlive` is deliberately off, so quitting from the menu bar keeps it closed
+until the next login rather than having launchd bring it straight back. Remove
+it again with `launchctl bootout gui/$UID/com.viktor.gta6countdown`.
 
 ## Using the widget
 

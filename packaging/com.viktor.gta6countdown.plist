@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.viktor.gta6countdown</string>
+
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Applications/GTA VI Countdown.app/Contents/MacOS/gta6countdown</string>
+	</array>
+
+	<key>RunAtLoad</key>
+	<true/>
+
+	<!-- The widget is meant to be dismissable: quitting it from the menu bar
+	     should keep it closed until the next login, not respawn it. -->
+	<key>KeepAlive</key>
+	<false/>
+
+	<key>ProcessType</key>
+	<string>Interactive</string>
+</dict>
+</plist>
