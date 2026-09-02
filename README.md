@@ -20,6 +20,7 @@ countdown ticks in the menu bar, where the size and behaviour controls live.
 npm install
 npm run widget:dev     # run with hot reload
 npm run widget:build   # produce a signed-for-local-use .app and .dmg
+npm run widget:dist    # same, then wrap a shareable disk image in release/
 ```
 
 The finished app lands in `src-tauri/target/release/bundle/macos/`. Drag it to
@@ -37,6 +38,37 @@ launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.realroyalcrown.gta6count
 `KeepAlive` is deliberately off, so quitting from the menu bar keeps it closed
 until the next login rather than having launchd bring it straight back. Remove
 it again with `launchctl bootout gui/$UID/com.realroyalcrown.gta6countdown`.
+
+## Sharing with friends
+
+There is no paid Apple Developer ID on this project, so Gatekeeper on someone
+else's Mac will treat a downloaded copy as unidentified. That is expected. It
+does not mean the file is damaged. The shareable image in
+`release/GTA-VI-Countdown-*-macos-arm64.dmg` is built for **Apple silicon**
+(M1 and later), macOS 13+.
+
+Send them that disk image — Messages, AirDrop, a link to the GitHub Release.
+They do not need a GitHub account if you send the file. Inside it:
+
+1. Open Terminal.
+2. Drag `Nainstalovat` onto the Terminal window and press Enter.
+
+That copies the app into `/Applications`, clears the quarantine flag, registers
+the login item, and launches it. The same steps are in `Přečti mě.txt` on the
+disk. A one-liner if they have already dragged the app into Applications
+themselves:
+
+```bash
+xattr -cr "/Applications/GTA VI Countdown.app" && open "/Applications/GTA VI Countdown.app"
+```
+
+System Settings → Privacy & Security → Open Anyway sometimes works on macOS 15;
+on macOS 26 the Terminal step is the one that actually sticks.
+
+A notarized build would skip all of that, and it is the only way Apple will
+call a download “safe” in the Gatekeeper sense. It requires a Developer ID
+certificate at 99 USD per year. This installer is the workaround for handing
+a copy to people who already trust you.
 
 ## Using the widget
 
@@ -182,6 +214,7 @@ src-tauri/src/
   typeface.rs             Locates an installed Pricedown
   widget_size.rs          The three size presets
 branding/                 Logo source and the tools that derive the icons
+packaging/                Login-item plist, friend installer, dist image
 tools/                    Development helpers
 ```
 

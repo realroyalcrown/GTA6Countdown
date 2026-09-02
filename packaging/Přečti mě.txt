@@ -1,0 +1,54 @@
+GTA VI Countdown
+================
+
+Osobní widget na plochu a do horní lišty. Odpočet do vydání GTA VI
+(19. listopadu 2026). Není od Rockstaru ani Take-Two.
+
+Apple Silicon (čip M). macOS 13 Ventura nebo novější.
+
+
+Instalace (dva kroky)
+---------------------
+
+Apple tuto aplikaci nepodepsalo, protože autor neplatí vývojářský účet.
+To neznamená, že je poškozená — macOS ji po stažení jen zamkne. Zámek
+sundáte spuštěním instalátoru z Terminalu.
+
+1. Otevřete Aplikace → Nástroje → Terminal.
+
+2. Přetáhněte soubor „Nainstalovat“ z tohoto disku do okna Terminalu
+   a stiskněte Enter.
+
+Instalátor zkopíruje widget do složky Aplikace, sundá zámek, zapne
+spuštění po přihlášení a widget spustí.
+
+Hotovo. Widget je na ploše, odpočet v horní liště.
+
+
+Když Terminal nechcete používat
+-------------------------------
+
+1. Přetáhněte „GTA VI Countdown“ do složky Aplikace.
+2. Otevřete ji. macOS 15 a 26 ji obvykle zablokuje.
+3. Systémové nastavení → Soukromí a zabezpečení → Otevřít přesto.
+   Na macOS 26 to někdy nestačí — pak je potřeba krok s Terminalem výše.
+
+
+Odinstalace
+-----------
+
+V horní liště otevřete menu widgetu a zvolte Quit.
+Smažte „GTA VI Countdown“ ze složky Aplikace.
+
+Volitelně v Terminalu:
+
+  launchctl bootout gui/$UID/com.realroyalcrown.gta6countdown
+  rm ~/Library/LaunchAgents/com.realroyalcrown.gta6countdown.plist
+
+
+English
+-------
+
+Apple Silicon, macOS 13+. Open Terminal, drag “Nainstalovat” onto it,
+press Enter. That copies the app into /Applications, clears the
+Gatekeeper quarantine, starts it at login, and launches it.

@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "widget:dev": "tauri dev",
-    "widget:build": "tauri build"
+    "widget:build": "tauri build",
+    "widget:dist": "tauri build && bash packaging/make-dist.sh"
   },
   "dependencies": {
     "react": "^19.1.0",
