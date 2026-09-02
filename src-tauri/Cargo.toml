@@ -2,7 +2,7 @@
 name = "gta6countdown"
 version = "1.0.0"
 description = "Live countdown to the release of Grand Theft Auto VI"
-authors = ["Viktor"]
+authors = ["RealRoyalCrown"]
 edition = "2021"
 
 [lib]

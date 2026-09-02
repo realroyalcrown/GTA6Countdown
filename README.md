@@ -30,13 +30,13 @@ Items**, or install the launch agent in `packaging/`, which does the same thing
 from the command line:
 
 ```bash
-cp packaging/com.viktor.gta6countdown.plist ~/Library/LaunchAgents/
-launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.viktor.gta6countdown.plist
+cp packaging/com.realroyalcrown.gta6countdown.plist ~/Library/LaunchAgents/
+launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.realroyalcrown.gta6countdown.plist
 ```
 
 `KeepAlive` is deliberately off, so quitting from the menu bar keeps it closed
 until the next login rather than having launchd bring it straight back. Remove
-it again with `launchctl bootout gui/$UID/com.viktor.gta6countdown`.
+it again with `launchctl bootout gui/$UID/com.realroyalcrown.gta6countdown`.
 
 ## Using the widget
 
