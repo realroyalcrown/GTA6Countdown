@@ -133,13 +133,16 @@ write(context.makeImage()!, to: outputDirectory.appendingPathComponent("app-icon
 
 let silhouette = loadImage(silhouetteURL)
 
-// Menu bar glyphs do not fill the bar's full height. The mark is sized to sit
-// against the cap height of the adjacent countdown text, and the padding is
-// split unevenly — more above than below — so its baseline lines up with the
-// text's rather than centring the glyph in the bar.
+// Menu bar glyphs do not fill the bar's full height. The mark is sized to the
+// cap height of the adjacent countdown text and padded so its top and bottom
+// edges land on the text's, which is what reads as aligned. AppKit centres the
+// canvas vertically in the bar while the text's cap height sits above that
+// centre, so the padding is deliberately larger below than above. AppKit also
+// scales the canvas down to roughly 18pt, making one on-screen pixel about
+// seven pixels here.
 let trayHeight = 128
-let trayTopPadding = 34
-let trayBottomPadding = 22
+let trayTopPadding = 20
+let trayBottomPadding = 36
 let trayContentHeight = trayHeight - trayTopPadding - trayBottomPadding
 let trayWidth =
     Int((Double(silhouette.width) / Double(silhouette.height) * Double(trayContentHeight)).rounded())

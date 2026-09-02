@@ -126,6 +126,15 @@ backdrop disappears while the logo's dark purple outline and its antialiased
 edges survive, then crops to the opaque bounds. `make-icons.swift` composites
 the app icon and pads the silhouette to menu bar proportions.
 
+That padding is asymmetric on purpose. AppKit centres the tray image in the
+bar, but the countdown text's cap height sits above that centre, so a centred
+glyph reads as sitting too low. The padding lifts the mark until its top and
+bottom edges land on the text's. Because AppKit scales the 128 px canvas down
+to roughly 18 pt, one on-screen pixel is about seven pixels of padding — too
+fine to judge by eye, so `swift tools/menubar-metrics.swift <screenshot.png>`
+reports the pixel rows each glyph in a menu bar screenshot occupies. The icon
+is aligned when its row range matches the digits'.
+
 Swap in different artwork by replacing the source image and re-running those
 commands.
 
@@ -199,7 +208,9 @@ Two details worth knowing if you modify it:
 
 Run the backend tests with `cd src-tauri && cargo test`. To inspect the live
 window's position and layer — useful because a desktop-level window hides
-behind everything — run `swift tools/window-probe.swift`.
+behind everything — run `swift tools/window-probe.swift`. To check the tray
+icon's alignment against the countdown text, use `tools/menubar-metrics.swift`
+as described under [Artwork](#artwork).
 
 ## Licence and trademarks
 
