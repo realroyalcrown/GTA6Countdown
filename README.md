@@ -43,26 +43,36 @@ it again with `launchctl bootout gui/$UID/com.realroyalcrown.gta6countdown`.
 The widget has no window chrome. Drag it anywhere by its background; it stays
 where you put it, on every Space, across restarts.
 
-Hovering reveals a small control strip in the top right:
+Hovering reveals the controls, sizes on the left and window behaviour on the
+right:
 
-| Control | Effect |
-| --- | --- |
-| `S` `M` `L` | Switch between the three widget sizes |
-| Pin | Toggle between sitting on the desktop and floating above windows |
-| `×` | Hide the widget; bring it back from the menu bar |
+| Control | Position | Effect |
+| --- | --- | --- |
+| `S` `M` `L` | Top left | Switch between the three widget sizes |
+| Pin | Top right | Toggle between sitting on the desktop and floating above windows |
+| `×` | Top right | Hide the widget; bring it back from the menu bar |
 
-The menu bar icon carries the same options plus **Move to Screen Center** and
-**Quit**. Centring targets the usable area — between the menu bar and the Dock,
-on the display the widget is currently on — rather than the raw screen
-rectangle, so the result looks centred instead of sitting high.
+The menu bar icon carries the same options plus **Move to Screen Center**, a
+link to the author's site and **Quit**. Centring targets the usable area —
+between the menu bar and the Dock, on the display the widget is currently on —
+rather than the raw screen rectangle, so the result looks centred instead of
+sitting high.
+
+Everything in the widget is a single centred column: logo, title, `Release
+Countdown`, the release moment with its offset, the countdown, then the footer.
 
 ### Sizes
 
-| Preset | Points | Layout |
+| Preset | Points | Countdown |
 | --- | --- | --- |
-| Small | 240 × 240 | Two-by-two grid |
-| Medium | 400 × 190 | Single row |
-| Large | 540 × 300 | Single row plus platform line |
+| Small | 240 × 300 | Two-by-two grid, abbreviated month |
+| Medium | 400 × 240 | Single row |
+| Large | 540 × 320 | Single row |
+
+The heights follow the stacked layout rather than round numbers. Small is a
+portrait tile because the two-by-two grid needs the vertical room; it keeps the
+same numeral size as medium, since each of its cells is about as wide as
+medium's.
 
 ### Desktop vs. floating
 
@@ -135,8 +145,11 @@ That target is resolved to an absolute instant, which keeps it correct across
 the autumn daylight saving change: the release falls after it, and the offset
 in force on release day — not today's — is what the maths uses. Moving the Mac
 to another time zone changes which instant local midnight means, so the widget
-re-resolves the target whenever the zone changes. The large layout spells the
-offset out next to the date.
+re-resolves the target whenever the zone changes.
+
+Every size prints that instant as wall time with its offset, formatted from the
+instant rather than from calendar parts. A Mac in another zone therefore shows
+that zone's time for the same moment.
 
 ## How it is put together
 
@@ -148,7 +161,7 @@ Electron equivalent.
 ```
 src/                      React frontend, function components only
   components/             Widget UI
-  hooks/                  Countdown clock, widget state, typeface loading
+  hooks/                  Countdown clock, widget state, time zone, typeface
   lib/                    Countdown maths and the Rust bridge
 src-tauri/src/
   countdown.rs            Release target and remaining-time maths

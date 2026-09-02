@@ -14,13 +14,15 @@ pub enum WidgetSize {
 impl WidgetSize {
     pub const ALL: [WidgetSize; 3] = [WidgetSize::Small, WidgetSize::Medium, WidgetSize::Large];
 
-    /// Logical points, mirroring the proportions of native macOS widgets:
-    /// a square small tile, a roughly 2:1 medium, and a wider large.
+    /// Logical points. The heights are driven by the stacked layout — logo,
+    /// title, subtitle, release line, countdown, footer — rather than by round
+    /// numbers; small is the narrow portrait tile with its two-by-two grid,
+    /// medium and large lay the countdown out in a single row.
     pub fn dimensions(self) -> (f64, f64) {
         match self {
-            WidgetSize::Small => (240.0, 240.0),
-            WidgetSize::Medium => (400.0, 190.0),
-            WidgetSize::Large => (540.0, 300.0),
+            WidgetSize::Small => (240.0, 300.0),
+            WidgetSize::Medium => (400.0, 240.0),
+            WidgetSize::Large => (540.0, 320.0),
         }
     }
 

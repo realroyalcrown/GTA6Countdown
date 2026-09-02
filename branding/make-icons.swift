@@ -133,18 +133,22 @@ write(context.makeImage()!, to: outputDirectory.appendingPathComponent("app-icon
 
 let silhouette = loadImage(silhouetteURL)
 
-// Menu bar glyphs do not fill the bar's full height; the padding keeps the
-// mark optically level with neighbouring status items.
+// Menu bar glyphs do not fill the bar's full height. The mark is sized to sit
+// against the cap height of the adjacent countdown text, and the padding is
+// split unevenly — more above than below — so its baseline lines up with the
+// text's rather than centring the glyph in the bar.
 let trayHeight = 128
-let trayPadding = 15
-let trayContentHeight = trayHeight - trayPadding * 2
+let trayTopPadding = 34
+let trayBottomPadding = 22
+let trayContentHeight = trayHeight - trayTopPadding - trayBottomPadding
 let trayWidth =
     Int((Double(silhouette.width) / Double(silhouette.height) * Double(trayContentHeight)).rounded())
 
 let trayContext = makeContext(width: trayWidth, height: trayHeight)
+// The context's origin is bottom-left, so the bottom padding is the y offset.
 trayContext.draw(
     silhouette,
-    in: CGRect(x: 0, y: trayPadding, width: trayWidth, height: trayContentHeight)
+    in: CGRect(x: 0, y: trayBottomPadding, width: trayWidth, height: trayContentHeight)
 )
 
 write(trayContext.makeImage()!, to: outputDirectory.appendingPathComponent("tray.png"))

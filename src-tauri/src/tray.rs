@@ -6,6 +6,7 @@ use chrono::{Local, Timelike};
 use tauri::menu::{CheckMenuItemBuilder, MenuBuilder, MenuItemBuilder, PredefinedMenuItem};
 use tauri::tray::{TrayIcon, TrayIconBuilder};
 use tauri::{include_image, AppHandle, Manager, Runtime};
+use tauri_plugin_opener::OpenerExt;
 
 use crate::countdown;
 use crate::desktop_window::StackingMode;
@@ -13,6 +14,8 @@ use crate::state::AppState;
 use crate::widget_size::WidgetSize;
 
 pub const TRAY_ID: &str = "gta6-countdown-tray";
+
+const AUTHOR_URL: &str = "https://realroyalcrown.eu";
 
 pub fn build<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<TrayIcon<R>> {
     let tray = TrayIconBuilder::with_id(TRAY_ID)
@@ -73,6 +76,10 @@ fn menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<tauri::menu::Menu<R>> {
     );
 
     builder = builder.item(&PredefinedMenuItem::separator(app)?);
+    builder = builder
+        .item(&MenuItemBuilder::with_id("author-site", "RealRoyalCrown.eu").build(app)?);
+
+    builder = builder.item(&PredefinedMenuItem::separator(app)?);
     builder = builder.item(&MenuItemBuilder::with_id("quit", "Quit").build(app)?);
 
     builder.build()
@@ -100,6 +107,9 @@ fn handle_menu_event<R: Runtime>(app: &AppHandle<R>, event: tauri::menu::MenuEve
         }
         "center-widget" => {
             let _ = crate::commands::center_widget(app.clone());
+        }
+        "author-site" => {
+            let _ = app.opener().open_url(AUTHOR_URL, None::<&str>);
         }
         other => {
             if let Some(size) = other.strip_prefix("size:").and_then(WidgetSize::from_id) {

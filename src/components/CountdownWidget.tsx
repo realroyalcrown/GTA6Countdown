@@ -2,14 +2,14 @@ import { useCountdown } from "../hooks/useCountdown";
 import { useGtaTypeface } from "../hooks/useGtaTypeface";
 import { useReleaseTarget } from "../hooks/useReleaseTarget";
 import { useWidgetState } from "../hooks/useWidgetState";
-import { formatReleaseDate, formatReleaseZone } from "../lib/countdown";
-import type { ReleaseTarget, WidgetSize } from "../types";
+import { formatReleaseMoment } from "../lib/countdown";
 import { CountdownGrid } from "./CountdownGrid";
 import { GtaSixMark } from "./GtaSixMark";
 import { WidgetBackdrop } from "./WidgetBackdrop";
 import { WidgetControls } from "./WidgetControls";
+import { WidgetFooter } from "./WidgetFooter";
 
-const MARK_HEIGHT = { small: 22, medium: 26, large: 34 } as const;
+const MARK_HEIGHT = { small: 26, medium: 30, large: 40 } as const;
 
 export function CountdownWidget() {
   const target = useReleaseTarget();
@@ -23,21 +23,22 @@ export function CountdownWidget() {
       data-size={state.size}
       data-typeface={typeface ? "gta" : "system"}
       style={typeface ? ({ "--display-font": `"${typeface}"` } as React.CSSProperties) : undefined}
-      /* "deep" makes the whole surface draggable; Tauri still excludes buttons,
-         so the hover controls keep working. */
+      /* "deep" makes the whole surface draggable; Tauri still excludes buttons
+         and links, so the controls and the footer link keep working. */
       data-tauri-drag-region="deep"
     >
       <WidgetBackdrop />
 
       <div className="widget__content">
-        <header className="widget__header">
+        <header className="widget__head">
           <GtaSixMark height={MARK_HEIGHT[state.size]} />
-          <div className="widget__titles">
-            <p className="widget__eyebrow">Grand Theft Auto</p>
-            <p className="widget__caption">
-              {remaining.released ? "Out now" : releaseCaption(target, state.size)}
-            </p>
-          </div>
+          <h1 className="widget__title">Grand Theft Auto 6</h1>
+          <p className="widget__subtitle">Release Countdown</p>
+          <p className="widget__release">
+            {remaining.released
+              ? "Out now"
+              : formatReleaseMoment(target.epochMs, state.size === "small" ? "short" : "long")}
+          </p>
         </header>
 
         {remaining.released ? (
@@ -46,9 +47,7 @@ export function CountdownWidget() {
           <CountdownGrid remaining={remaining} />
         )}
 
-        {state.size === "large" && (
-          <p className="widget__footer">PlayStation 5 &middot; Xbox Series X|S</p>
-        )}
+        <WidgetFooter />
       </div>
 
       <WidgetControls
@@ -59,13 +58,4 @@ export function CountdownWidget() {
       />
     </main>
   );
-}
-
-/** Only the large layout has room to spell out which midnight is meant. */
-function releaseCaption(target: ReleaseTarget, size: WidgetSize): string {
-  const date = formatReleaseDate(target);
-  if (size !== "large") return date;
-
-  const zone = formatReleaseZone(target);
-  return zone ? `${date} · ${zone}` : date;
 }

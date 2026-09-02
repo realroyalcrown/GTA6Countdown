@@ -34,32 +34,36 @@ export function formatUnit(value: number, pad: number): string {
   return String(value).padStart(pad, "0");
 }
 
-export function formatReleaseDate(target: ReleaseDateParts): string {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "long",
+/**
+ * The release moment as it falls in the machine's own time zone, with the
+ * offset spelled out — the offset in force on release day, which is not
+ * necessarily today's, since the release lands after the autumn daylight
+ * saving change in many regions.
+ *
+ * Formatting from the absolute instant rather than from calendar parts is what
+ * makes the conversion correct: the widget targets local midnight, so a Mac set
+ * to another zone shows that zone's wall time for the same instant.
+ */
+export function formatReleaseMoment(epochMs: number, monthStyle: MonthStyle): string {
+  const moment = new Date(epochMs);
+
+  const date = new Intl.DateTimeFormat("en-US", {
+    month: monthStyle,
     day: "numeric",
     year: "numeric",
-  }).format(releaseDay(target));
+  }).format(moment);
+
+  const clock = new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(moment);
+
+  const zone = new Intl.DateTimeFormat("en-US", { timeZoneName: "short" })
+    .formatToParts(moment)
+    .find((part) => part.type === "timeZoneName")?.value;
+
+  return zone ? `${date} · ${clock} ${zone}` : `${date} · ${clock}`;
 }
 
-/**
- * The offset in force on release day, which is not necessarily today's: the
- * release falls after the autumn daylight saving change in many regions.
- */
-export function formatReleaseZone(target: ReleaseDateParts): string {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZoneName: "short",
-  }).formatToParts(releaseDay(target));
-
-  return parts.find((part) => part.type === "timeZoneName")?.value ?? "";
-}
-
-function releaseDay(target: ReleaseDateParts): Date {
-  return new Date(target.year, target.month - 1, target.day);
-}
-
-interface ReleaseDateParts {
-  year: number;
-  month: number;
-  day: number;
-}
+type MonthStyle = "long" | "short";

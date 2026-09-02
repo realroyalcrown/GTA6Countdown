@@ -50,9 +50,13 @@ body {
   display: flex;
   flex: 1;
   flex-direction: column;
+  align-items: center;
   gap: var(--content-gap);
+  /* Header, countdown and footer share the height; everything is centred on
+     the horizontal axis. */
   justify-content: space-between;
   padding: var(--pad);
+  text-align: center;
 }
 
 /* ------------------------------------------------------------- backdrop */
@@ -109,8 +113,9 @@ body {
 
 /* --------------------------------------------------------------- header */
 
-.widget__header {
+.widget__head {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: var(--header-gap);
 }
@@ -121,26 +126,30 @@ body {
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
 }
 
-.widget__titles {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.widget__eyebrow {
-  font-size: var(--eyebrow-size);
-  font-weight: 600;
-  letter-spacing: 0.14em;
+.widget__title {
+  font-size: var(--title-size);
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink);
   white-space: nowrap;
 }
 
-.widget__caption {
+.widget__subtitle {
+  font-size: var(--subtitle-size);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+
+.widget__release {
   font-size: var(--caption-size);
   font-weight: 500;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
+  /* Tabular figures keep the clock from shifting when the offset changes. */
+  font-variant-numeric: tabular-nums;
   color: var(--ink-dim);
   white-space: nowrap;
 }
@@ -149,6 +158,7 @@ body {
 
 .grid {
   display: grid;
+  width: 100%;
   grid-template-columns: repeat(4, 1fr);
   align-items: end;
 }
@@ -191,12 +201,29 @@ body {
 }
 
 .widget__footer {
-  font-size: var(--label-size);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-align: center;
-  text-transform: uppercase;
-  color: var(--ink-dim);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--footer-size);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.widget__footer-dot {
+  opacity: 0.6;
+}
+
+.widget__link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 120ms ease-out;
+}
+
+.widget__link:hover {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .widget__released {
@@ -227,15 +254,23 @@ body {
   position: absolute;
   z-index: 2;
   top: 8px;
-  right: 8px;
   display: flex;
   gap: 6px;
   opacity: 0;
   transition: opacity 140ms ease-out;
 }
 
+.controls--start {
+  left: 8px;
+}
+
+.controls--end {
+  right: 8px;
+}
+
+/* Both strips reveal together, so hovering either one shows the full set. */
 .widget:hover .controls,
-.controls:focus-within {
+.widget:focus-within .controls {
   opacity: 1;
 }
 
@@ -282,17 +317,19 @@ body {
 
 /* ------------------------------------------------------------ size tiers */
 
-/* Type sizes match medium: the two-by-two grid gives each numeral as much
+/* Numeral size matches medium: the two-by-two grid gives each numeral as much
    width as medium's single row does, so there is no need to shrink it. Only
-   the spacing tightens to fit the smaller frame. */
+   the spacing and the supporting text tighten to fit the narrower frame. */
 .widget[data-size="small"] {
-  --pad: 15px;
-  --content-gap: 10px;
-  --header-gap: 7px;
-  --eyebrow-size: 9px;
-  --caption-size: 9px;
+  --pad: 14px;
+  --content-gap: 12px;
+  --header-gap: 4px;
+  --title-size: 10px;
+  --subtitle-size: 8px;
+  --caption-size: 8px;
   --value-size: 40px;
   --label-size: 8px;
+  --footer-size: 7px;
   --unit-gap: 4px;
 }
 
@@ -311,23 +348,27 @@ body {
 }
 
 .widget[data-size="medium"] {
-  --pad: 18px;
+  --pad: 16px;
   --content-gap: 14px;
-  --header-gap: 9px;
-  --eyebrow-size: 9px;
+  --header-gap: 5px;
+  --title-size: 12px;
+  --subtitle-size: 9px;
   --caption-size: 9px;
   --value-size: 40px;
   --label-size: 8px;
+  --footer-size: 8px;
   --unit-gap: 5px;
 }
 
 .widget[data-size="large"] {
-  --pad: 26px;
-  --content-gap: 20px;
-  --header-gap: 13px;
-  --eyebrow-size: 12px;
-  --caption-size: 12px;
-  --value-size: 58px;
+  --pad: 22px;
+  --content-gap: 18px;
+  --header-gap: 7px;
+  --title-size: 15px;
+  --subtitle-size: 11px;
+  --caption-size: 11px;
+  --value-size: 56px;
   --label-size: 10px;
+  --footer-size: 9px;
   --unit-gap: 8px;
 }

@@ -69,6 +69,16 @@ export async function requestCenter(): Promise<void> {
   await invoke("center_window");
 }
 
+/** Hands a URL to the default browser; in a plain browser, opens a tab. */
+export async function openExternal(url: string): Promise<void> {
+  if (!isTauri()) {
+    window.open(url, "_blank", "noopener");
+    return;
+  }
+  const { openUrl } = await import("@tauri-apps/plugin-opener");
+  await openUrl(url);
+}
+
 export async function onStateChanged(
   handler: (state: WidgetState) => void,
 ): Promise<() => void> {

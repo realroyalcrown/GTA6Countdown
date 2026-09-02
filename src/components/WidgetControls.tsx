@@ -24,42 +24,46 @@ export function WidgetControls({
   const floating = stacking === "alwaysOnTop";
 
   return (
-    <div className="controls">
-      <div className="controls__group" role="group" aria-label="Widget size">
-        {SIZES.map((option) => (
-          <button
-            key={option.id}
-            type="button"
-            className="controls__button"
-            aria-label={option.label}
-            aria-pressed={option.id === size}
-            onClick={() => onSizeChange(option.id)}
-          >
-            {option.short}
-          </button>
-        ))}
+    <>
+      <div className="controls controls--start">
+        <div className="controls__group" role="group" aria-label="Widget size">
+          {SIZES.map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              className="controls__button"
+              aria-label={option.label}
+              aria-pressed={option.id === size}
+              onClick={() => onSizeChange(option.id)}
+            >
+              {option.short}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="controls__group">
-        <button
-          type="button"
-          className="controls__button"
-          aria-label={floating ? "Pin back to desktop" : "Float above windows"}
-          aria-pressed={floating}
-          onClick={() => onStackingChange(floating ? "desktop" : "alwaysOnTop")}
-        >
-          <PinIcon filled={floating} />
-        </button>
-        <button
-          type="button"
-          className="controls__button"
-          aria-label="Hide widget"
-          onClick={() => void requestHide()}
-        >
-          <CloseIcon />
-        </button>
+      <div className="controls controls--end">
+        <div className="controls__group">
+          <button
+            type="button"
+            className="controls__button"
+            aria-label={floating ? "Pin back to desktop" : "Float above windows"}
+            aria-pressed={floating}
+            onClick={() => onStackingChange(floating ? "desktop" : "alwaysOnTop")}
+          >
+            <PinIcon filled={floating} />
+          </button>
+          <button
+            type="button"
+            className="controls__button"
+            aria-label="Hide widget"
+            onClick={() => void requestHide()}
+          >
+            <CloseIcon />
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
