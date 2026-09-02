@@ -1,0 +1,33 @@
+[package]
+name = "gta6countdown"
+version = "1.0.0"
+description = "Live countdown to the release of Grand Theft Auto VI"
+authors = ["Viktor"]
+edition = "2021"
+
+[lib]
+name = "gta6countdown_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+# `macos-private-api` backs the transparent window that the glass layers need.
+# It rules out Mac App Store distribution, which does not apply to a personal
+# desktop widget.
+tauri = { version = "2", features = ["tray-icon", "image-png", "macos-private-api"] }
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = "0.4"
+base64 = "0.22"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

@@ -1,0 +1,333 @@
+:root {
+  --display-font: -apple-system, "SF Pro Display", "Helvetica Neue", sans-serif;
+  --ui-font: -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+  /* Fixed advance per numeral; tuned per typeface below. */
+  --digit-width: 0.62em;
+  --corner: 22px;
+  --ink: #ffffff;
+  --ink-dim: rgba(255, 255, 255, 0.62);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  background: transparent;
+}
+
+body {
+  overflow: hidden;
+  font-family: var(--ui-font);
+  -webkit-font-smoothing: antialiased;
+  /* The whole surface is a widget, not a document. */
+  user-select: none;
+  cursor: default;
+}
+
+/* ---------------------------------------------------------------- widget */
+
+.widget {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--corner);
+  color: var(--ink);
+  /* Keeps the backdrop's blur from sampling outside the rounded frame. */
+  isolation: isolate;
+}
+
+.widget__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--content-gap);
+  justify-content: space-between;
+  padding: var(--pad);
+}
+
+/* ------------------------------------------------------------- backdrop */
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.backdrop__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Slight overscan hides the blur's soft edges. */
+  transform: scale(1.06);
+  filter: saturate(1.2) contrast(1.05);
+}
+
+/* Frosted pane: blurs the artwork underneath and adds the specular sheen and
+   hairline rim that make a surface read as glass. */
+.backdrop__glass {
+  position: absolute;
+  inset: 0;
+  /* Enough blur to read as glass, little enough that the artwork behind it is
+     still recognisable. */
+  backdrop-filter: blur(7px) saturate(150%);
+  -webkit-backdrop-filter: blur(7px) saturate(150%);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.07) 38%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border-radius: var(--corner);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Medium dark smoke: the contrast floor for the white numerals. */
+.backdrop__smoke {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      130% 105% at 50% 8%,
+      rgba(12, 6, 24, 0.22) 0%,
+      rgba(8, 4, 18, 0.46) 100%
+    ),
+    rgba(10, 6, 20, 0.26);
+}
+
+/* --------------------------------------------------------------- header */
+
+.widget__header {
+  display: flex;
+  align-items: center;
+  gap: var(--header-gap);
+}
+
+.gta-mark {
+  flex: none;
+  width: auto;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
+}
+
+.widget__titles {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.widget__eyebrow {
+  font-size: var(--eyebrow-size);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.widget__caption {
+  font-size: var(--caption-size);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------- grid */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: end;
+}
+
+.unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--unit-gap);
+  padding: 0 2px;
+}
+
+/* Hairline dividers between units, none before the first. */
+.unit + .unit {
+  box-shadow: inset 1px 0 0 0 rgba(255, 255, 255, 0.14);
+}
+
+.unit__value {
+  display: flex;
+  font-family: var(--display-font);
+  font-size: var(--value-size);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.unit__digit {
+  width: var(--digit-width);
+  text-align: center;
+}
+
+.unit__label {
+  font-size: var(--label-size);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.widget__footer {
+  font-size: var(--label-size);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.widget__released {
+  font-family: var(--display-font);
+  font-size: var(--value-size);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
+}
+
+/* Pricedown is a display face with tall caps and no tabular figures, so it
+   needs its own rhythm. */
+.widget[data-typeface="gta"] {
+  --digit-width: 0.56em;
+}
+
+.widget[data-typeface="gta"] .unit__value,
+.widget[data-typeface="gta"] .widget__released {
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  font-size: calc(var(--value-size) * 1.22);
+}
+
+/* ------------------------------------------------------------- controls */
+
+.controls {
+  position: absolute;
+  z-index: 2;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 140ms ease-out;
+}
+
+.widget:hover .controls,
+.controls:focus-within {
+  opacity: 1;
+}
+
+.controls__group {
+  display: flex;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(20, 12, 32, 0.5);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.controls__button {
+  display: grid;
+  width: 22px;
+  height: 20px;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  font-family: var(--ui-font);
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.68);
+  cursor: default;
+  transition:
+    background-color 120ms ease-out,
+    color 120ms ease-out;
+}
+
+.controls__button:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+.controls__button[aria-pressed="true"] {
+  background: rgba(255, 255, 255, 0.26);
+  color: #ffffff;
+}
+
+.controls__button + .controls__button {
+  box-shadow: inset 1px 0 0 0 rgba(255, 255, 255, 0.14);
+}
+
+/* ------------------------------------------------------------ size tiers */
+
+/* Type sizes match medium: the two-by-two grid gives each numeral as much
+   width as medium's single row does, so there is no need to shrink it. Only
+   the spacing tightens to fit the smaller frame. */
+.widget[data-size="small"] {
+  --pad: 15px;
+  --content-gap: 10px;
+  --header-gap: 7px;
+  --eyebrow-size: 9px;
+  --caption-size: 9px;
+  --value-size: 40px;
+  --label-size: 8px;
+  --unit-gap: 4px;
+}
+
+.widget[data-size="small"] .grid {
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 12px;
+}
+
+/* With two columns the divider belongs on the second cell of each row. */
+.widget[data-size="small"] .unit + .unit {
+  box-shadow: none;
+}
+
+.widget[data-size="small"] .unit:nth-child(even) {
+  box-shadow: inset 1px 0 0 0 rgba(255, 255, 255, 0.14);
+}
+
+.widget[data-size="medium"] {
+  --pad: 18px;
+  --content-gap: 14px;
+  --header-gap: 9px;
+  --eyebrow-size: 9px;
+  --caption-size: 9px;
+  --value-size: 40px;
+  --label-size: 8px;
+  --unit-gap: 5px;
+}
+
+.widget[data-size="large"] {
+  --pad: 26px;
+  --content-gap: 20px;
+  --header-gap: 13px;
+  --eyebrow-size: 12px;
+  --caption-size: 12px;
+  --value-size: 58px;
+  --label-size: 10px;
+  --unit-gap: 8px;
+}
